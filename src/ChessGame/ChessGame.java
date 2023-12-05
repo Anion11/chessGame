@@ -11,25 +11,20 @@ import java.util.Objects;
 
 public class ChessGame {
     private Board chessBoard;
-    private Player[] players;
+    private final Player[] players = new Player[2];
     private int currentPlayerIndex = 0;
-    public ChessGame(String game) {
+    public ChessGame(String game, String playerWhite, String playerBlack) {
         if (Objects.equals(game, "Classic")) initClassicGame();
         else if (Objects.equals(game, "Fisher")) initFisherGame();
+        players[0] = new Player(playerWhite, PieceColor.WHITE);
+        players[1] = new Player(playerBlack, PieceColor.BLACK);
     }
 
     private void initClassicGame() {
         chessBoard = new ClassicBoard();
-        System.out.println(chessBoard);
-        players = new Player[2];
-        players[0] = new Player("Player.Player 1", PieceColor.WHITE);
-        players[1] = new Player("Player.Player 2", PieceColor.BLACK);
     }
     private void initFisherGame() {
         chessBoard = new FisherBoard();
-        players = new Player[2];
-        players[0] = new Player("Player.Player 1", PieceColor.WHITE);
-        players[1] = new Player("Player.Player 2", PieceColor.BLACK);
     }
     public void startGame() {
         Player currentPlayer = getCurrentPlayer();
