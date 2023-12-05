@@ -1,10 +1,10 @@
 package Move;
 
-public class Move {
-    private int startX;
-    private int startY;
-    private int endX;
-    private int endY;
+public class Move implements MoveInterface{
+    private final int startX;
+    private final int startY;
+    private final int endX;
+    private final int endY;
 
     public Move(int startX, int startY, int endX, int endY) {
         this.startX = startX;

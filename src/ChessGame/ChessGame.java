@@ -1,5 +1,7 @@
 package ChessGame;
 
+import Board.ClassicBoard;
+import Board.FisherBoard;
 import Board.Board;
 import Piece.*;
 import Player.Player;
@@ -11,12 +13,20 @@ public class ChessGame {
     private Board chessBoard;
     private Player[] players;
     private int currentPlayerIndex = 0;
-    public ChessGame() {
-        initGame();
+    public ChessGame(String game) {
+        if (Objects.equals(game, "Classic")) initClassicGame();
+        else if (Objects.equals(game, "Fisher")) initFisherGame();
     }
 
-    private void initGame() {
-        chessBoard = new Board();
+    private void initClassicGame() {
+        chessBoard = new ClassicBoard();
+        System.out.println(chessBoard);
+        players = new Player[2];
+        players[0] = new Player("Player.Player 1", PieceColor.WHITE);
+        players[1] = new Player("Player.Player 2", PieceColor.BLACK);
+    }
+    private void initFisherGame() {
+        chessBoard = new FisherBoard();
         players = new Player[2];
         players[0] = new Player("Player.Player 1", PieceColor.WHITE);
         players[1] = new Player("Player.Player 2", PieceColor.BLACK);

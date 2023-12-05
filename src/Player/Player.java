@@ -1,13 +1,12 @@
 package Player;
-import Board.Board;
 import Piece.Piece;
 import Piece.PieceColor;
 import Move.Move;
-
+import Board.Board;
 import java.util.Objects;
 import java.util.Scanner;
 
-public class Player {
+public class Player implements PlayerInterface {
     private final String name;
     private final PieceColor pieceColor;
     private final Scanner scanner;
