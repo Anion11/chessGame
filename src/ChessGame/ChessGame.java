@@ -12,14 +12,14 @@ import java.util.Objects;
 public class ChessGame {
     private Board chessBoard;
     private final Player[] players = new Player[2];
-    private int currentPlayerIndex = 0;
+    private Player currentPlayer;
     public ChessGame(String game, String playerWhite, String playerBlack) {
-        if (Objects.equals(game, "Classic")) initClassicGame();
-        else if (Objects.equals(game, "Fisher")) initFisherGame();
+        if (Objects.equals(game, "classic")) initClassicGame();
+        else if (Objects.equals(game, "fisher")) initFisherGame();
         players[0] = new Player(playerWhite, PieceColor.WHITE);
         players[1] = new Player(playerBlack, PieceColor.BLACK);
+        currentPlayer = players[0];
     }
-
     private void initClassicGame() {
         chessBoard = new ClassicBoard();
     }
@@ -27,16 +27,13 @@ public class ChessGame {
         chessBoard = new FisherBoard();
     }
     public void startGame() {
-        Player currentPlayer = getCurrentPlayer();
         while (!isGameEnd()) {
             printChessBoard();
-            currentPlayer = getCurrentPlayer();
             Move move = currentPlayer.getMove(chessBoard);
             if (move.getEndGame()) {
                 switchPlayers();
-                currentPlayer = getCurrentPlayer();
                 break;
-            };
+            }
             chessBoard.makeMove(move);
             switchPlayers();
         }
@@ -60,25 +57,15 @@ public class ChessGame {
         System.out.println();
     }
     private void displayGameResult(Player winner) {
-        if (winner != null) {
-            System.out.println("Поздравляем, " + winner.getName() + " выиграл!");
-        } else {
-            System.out.println("Ничья");
-        }
-    }
-    private Player getWinner() {
-        return new Player("Никита", PieceColor.WHITE);
+        if (winner != null) System.out.println("Поздравляем, " + winner.getName() + " выиграл!");
+        else System.out.println("Ничья");
     }
     private boolean isGameEnd() {
-        // Логика проверки окончания игры (например, шах-мат, пат и т.д.)
+        // Логика проверки окончания игры (шах-мат, пат и т.д.)
         return false;
     }
-
-    private Player getCurrentPlayer() {
-        return players[currentPlayerIndex];
-    }
     private void switchPlayers() {
-        if (currentPlayerIndex == 1) currentPlayerIndex--;
-        else currentPlayerIndex++;
+        if (currentPlayer == players[0]) currentPlayer = players[1];
+        else currentPlayer = players[0];
     }
 }
