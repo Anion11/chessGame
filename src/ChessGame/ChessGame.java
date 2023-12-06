@@ -31,13 +31,14 @@ public class ChessGame {
             printChessBoard();
             Move move = currentPlayer.getMove(chessBoard);
             if (move.getEndGame()) {
-                switchPlayers();
                 break;
             }
             chessBoard.makeMove(move);
             switchPlayers();
         }
-        displayGameResult(currentPlayer);
+        switchPlayers();
+        if (true) displayGameResult(currentPlayer);
+        else displayGameResult(null);
     }
     public void printChessBoard() {
         System.out.printf("   %-3s %-3s %-3s %-3s %-3s %-3s %-3s %-3s", "A", "B", "C", "D", "E", "F", "G", "H");
@@ -61,8 +62,15 @@ public class ChessGame {
         else System.out.println("Ничья");
     }
     private boolean isGameEnd() {
-        // Логика проверки окончания игры (шах-мат, пат и т.д.)
-        return false;
+        int x = 0;
+        for (int i = 0; i < 8; i++){
+            for (int j = 0; j < 8; j++){
+                if (chessBoard.getPiece(i, j) != null) {
+                    if (Objects.equals(chessBoard.getPiece(i, j).getChar(), "K") || Objects.equals(chessBoard.getPiece(i, j).getChar(), "K^")) x++;
+                }
+            }
+        }
+        return x < 2;
     }
     private void switchPlayers() {
         if (currentPlayer == players[0]) currentPlayer = players[1];
