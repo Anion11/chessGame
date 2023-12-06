@@ -6,84 +6,84 @@ public class Queen extends Piece {
     }
     @Override
     public boolean isValidMove(Board board, int startX, int startY, int endX, int endY) {
-        // Проверка, что начальные и конечные координаты находятся в пределах доски
-        if (!isWithinBoard(startX, startY) || !isWithinBoard(endX, endY)) {
-            return false;
-        }
-
-        // Проверка, что начальная и конечная ячейки не совпадают
+        // Проверяем, что начальная позиция не совпадает с конечной позицией
         if (startX == endX && startY == endY) {
             return false;
         }
 
-        // Проверка, что ферзь не препятствован другими фигурами по горизонтали, вертикали или диагонали
-        if (!isClearHorizontalPath(board, startX, startY, endX, endY) ||
-                !isClearVerticalPath(board, startX, startY, endX, endY) ||
-                !isClearDiagonalPath(board, startX, startY, endX, endY)) {
-            return false;
-        }
+        // Проверяем, что между начальной и конечной позицией нет других фигур по горизонтали, вертикали
+        if (startX == endX || startY == endY) {
+            int dx = Integer.compare(endX, startX);
+            int dy = Integer.compare(endY, startY);
+            int x = startX + dx;
+            int y = startY + dy;
 
-        return true;
-    }
-
-    private boolean isWithinBoard(int x, int y) {
-        return x >= 0 && x < 9 && y >= 0 && y < 9;
-    }
-
-    private boolean isClearHorizontalPath(Board board, int startX, int startY, int endX, int endY) {
-        int minX = Math.min(startX, endX);
-        int maxX = Math.max(startX, endX);
-
-        for (int x = minX + 1; x < maxX; x++) {
-            if (board.getPiece(x, startY) != null) {
-                return false;
+            while (x != endX || y != endY) {
+                if (board.getPiece(x, y) != null) {
+                    return false;
+                }
+                x += dx;
+                y += dy;
             }
         }
+        else {
+            // Проверяем, что начальная позиция и конечная позиция находятся на диагонали
+            int deltaX = Math.abs(endX - startX);
+            int deltaY = Math.abs(endY - startY);
+            if (deltaX != deltaY) {
+                return false;
+            }
 
+            // Проверяем, что между начальной и конечной позицией нет других фигур
+            int xDirection = (endX > startX) ? 1 : -1;
+            int yDirection = (endY > startY) ? 1 : -1;
+            int currentX = startX + xDirection;
+            int currentY = startY + yDirection;
+            while (currentX != endX && currentY != endY) {
+                if (board.getPiece(currentX, currentY) != null) {
+                    return false;
+                }
+                currentX += xDirection;
+                currentY += yDirection;
+            }
+        }
+        // Проверяем, что в конечной точке либо пусто либо фигура противоположного цвета
+        if (board.getPiece(endX, endY) != null && board.getPiece(endX, endY).getColor() == getColor()) return false;
         return true;
     }
+    private boolean isClearHorizontalPath(Board board, int startX, int startY, int endX, int endY) {
 
-    private boolean isClearVerticalPath(Board board, int startX, int startY, int endX, int endY) {
-        int minY = Math.min(startY, endY);
-        int maxY = Math.max(startY, endY);
-
-        for (int y = minY + 1; y < maxY; y++) {
+        int step = (startX < endX) ? 1 : -1;
+        for (int y = startY + step; y != endY; y += step) {
             if (board.getPiece(startX, y) != null) {
                 return false;
             }
         }
+        return true;
+    }
 
+    private boolean isClearVerticalPath(Board board, int startX, int startY, int endX, int endY) {
+        int step = (startX < endX) ? 1 : -1;
+        for (int x = startX + step; x != endX; x += step) {
+            if (board.getPiece(x, startY) != null) {
+                return false;
+            }
+        }
         return true;
     }
 
     private boolean isClearDiagonalPath(Board board, int startX, int startY, int endX, int endY) {
-        int minX = Math.min(startX, endX);
-        int maxX = Math.max(startX, endX);
-        int minY = Math.min(startY, endY);
-        int maxY = Math.max(startY, endY);
-
-        int dx = Math.abs(endX - startX);
-        int dy = Math.abs(endY - startY);
-
-        if (dx != dy) {
-            return false;
-        }
-
-        int stepX = startX < endX ? 1 : -1;
-        int stepY = startY < endY ? 1 : -1;
-
+        int stepX = (startX < endX) ? 1 : -1;
+        int stepY = (startY < endY) ? 1 : -1;
         int x = startX + stepX;
         int y = startY + stepY;
-
-        while (x != endX || y != endY) {
+        while (x != endX && y != endY) {
             if (board.getPiece(x, y) != null) {
                 return false;
             }
-
             x += stepX;
             y += stepY;
         }
-
         return true;
     }
 }

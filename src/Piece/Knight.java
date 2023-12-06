@@ -7,13 +7,19 @@ public class Knight extends Piece {
 
     @Override
     public boolean isValidMove(Board board, int startX, int startY, int endX, int endY) {
-        int deltaX = Math.abs(endX - startX);
-        int deltaY = Math.abs(endY - startY);
-
-        if ((deltaX == 2 && deltaY == 1) || (deltaX == 1 && deltaY == 2)) {
-            return true;
+        // Проверяем, что начальная позиция не совпадает с конечной позицией
+        if (startX == endX && startY == endY) {
+            return false;
         }
 
-        return false;
+        // Проверяем, что ход коня является допустимым
+        int diffX = Math.abs(startX - endX);
+        int diffY = Math.abs(startY - endY);
+        if (!(diffX == 2 && diffY == 1)) {
+            return false;
+        }
+        // Проверяем, что в конечной точке либо пусто либо фигура противоположного цвета
+        if (board.getPiece(endX, endY) != null && board.getPiece(endX, endY).getColor() == getColor()) return false;
+        return true;
     }
 }

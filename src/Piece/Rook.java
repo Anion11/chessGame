@@ -27,9 +27,7 @@ public class Rook extends Piece {
             y += dy;
         }
         // Проверяем, если фигура в конечной точке наша, то ход недоступен
-        if (board.getPiece(endX, endY) != null && board.getPiece(endX, endY).getColor() == this.getColor()) {
-            return false;
-        }
+        if (board.getPiece(endX, endY) != null && board.getPiece(endX, endY).getColor() == this.getColor()) return false;
         return true;
     }
 }
